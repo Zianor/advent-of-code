@@ -40,6 +40,14 @@ How many passwords are valid according to their policies?
 policies = np.array([int(policy.split('-')[0]) <= policy.split(' ')[-1].count(
     policy.split(' ')[1].split(':')[0]) <= int(policy.split('-')[1].split(' ')[0]) for policy in data], dtype=np.bool)
 
+policies = np.empty(shape=data.shape, dtype=np.bool)
+for i, policy in enumerate(data):
+    password = policy.split(' ')[-1]
+    lower_limit = int(policy.split('-')[0])
+    upper_limit = int(policy.split('-')[1].split(' ')[0])
+    character = policy.split(' ')[1].split(':')[0]
+    policies[i] = lower_limit <= password.count(character) <= upper_limit
+
 print(f"Number of correct passwords (part 1): {policies.sum()}")
 
 """
@@ -75,5 +83,13 @@ position_2 = np.array(
     dtype=np.bool)
 
 policies_2 = np.array([position_1 != position_2], dtype=np.bool)
+
+policies_2 = np.empty(shape=data.shape, dtype=np.bool)
+for i, policy in enumerate(data):
+    password = policy.split(' ')[-1]
+    lower_limit = int(policy.split('-')[0])
+    upper_limit = int(policy.split('-')[1].split(' ')[0])
+    character = policy.split(' ')[1].split(':')[0]
+    policies_2[i] = (password[lower_limit - 1] == character) != (password[upper_limit - 1] == character)
 
 print(f"Number of correct passwords (part 2): {policies_2.sum()}")
