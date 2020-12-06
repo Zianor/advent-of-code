@@ -64,8 +64,12 @@ def get_number(spec, pos, min, max):
         return get_number(spec, pos + 1, (min + max) // 2 + 1, max)
 
 
-seats = np.array(
-    [get_number(spec[0:7], pos=0, min=0, max=127) * 8 + get_number(spec[7:10], pos=0, min=0, max=7) for spec in data])
+def get_number_binary(spec):
+    spec = spec.replace('F', '0').replace('L', '0').replace('B', '1').replace('R', '1')
+    return int(spec, base=2)
+
+
+seats = np.array([get_number_binary(spec) for spec in data])
 
 print(f"The highest seat ID is {np.max(seats)}")
 
